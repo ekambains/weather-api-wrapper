@@ -1,6 +1,8 @@
 import express from 'express';
 import { createClient } from 'redis';
-import 'dotenv/config'
+import 'dotenv/config';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 const app = express();
 const PORT = 3000;
@@ -11,13 +13,19 @@ const client = createClient();
 client.on('error', err => console.log('Redis Client Error', err));
 await client.connect();
 
-app.get("/", (req, res) => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+app.use(express.static(path.join(__dirname, 'frontend')));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
 app.post("/", async (req, res) => {
     const location = req.body.city;
-    const weatherData = await client.get(location);
+    const redisData = await client.get(location);
+    const weatherData = JSON.parse(redisData);
 
     if(weatherData == null) {
         const apiReq = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=${process.env.API_KEY}`);
@@ -25,8 +33,7 @@ app.post("/", async (req, res) => {
 
         if(apiResult) {
             const newData = {address: apiResult.address, description: apiResult.description, temp: apiResult.currentConditions.temp};
-            console.log("Coming from api");
-            res.json({success: true, data: newData});
+            res.json({success: true, data: newData, source: "API"});
             await client.set(location, JSON.stringify(newData), { EX: 3600 });
         }
         else {
@@ -34,7 +41,7 @@ app.post("/", async (req, res) => {
         }
     }
     else {
-        res.json({success: true, data: weatherData});
+        res.json({success: true, data: weatherData, source: "Redis"});
     }
 })
 

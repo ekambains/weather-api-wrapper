@@ -1,0 +1,70 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+}
+
+.inputContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+    gap: 25px;
+}
+
+.inputContainer input{
+    width: 200px;
+    height: 25px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 2px skyblue solid;
+}
+
+.inputContainer button{
+    height: 32px;
+    width: 80px;
+    border: none;
+    border-radius: 20px;
+    padding: 3px 10px;
+    background-color: skyblue;
+    cursor: pointer;
+}
+
+.inputContainer button:hover{
+    background-color: rgb(30, 107, 175);
+}
+
+.dataContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: skyblue;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin: 40px;
+    width: 250px;
+}
+
+.temp{
+    font-size: 40px;
+    margin-top: 5px;
+}
+
+.location{
+    font-size: 25px;
+    margin-top: 10px;
+}
+
+.description{
+    margin-top: 40px;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.source{
+    color: red;
+    font-weight: 600;
+}
