@@ -33,7 +33,7 @@ app.post("/", async (req, res) => {
 
         if(apiResult) {
             const newData = {address: apiResult.address, description: apiResult.description, temp: apiResult.currentConditions.temp};
-            res.json({success: true, data: newData, source: "API"});
+            res.json({success: true, source: "API", data: newData});
             await client.set(location, JSON.stringify(newData), { EX: 3600 });
         }
         else {
@@ -41,9 +41,9 @@ app.post("/", async (req, res) => {
         }
     }
     else {
-        res.json({success: true, data: weatherData, source: "Redis"});
+        res.json({success: true, source: "Redis", data: weatherData});
     }
-})
+});
 
 app.listen(PORT, () => {
     console.log(`Listening on port: ${PORT}`);
